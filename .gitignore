@@ -1,0 +1,9 @@
+*.o
+dwm
+dwm-msg
+patchs/
+.ccls-cache/
+config.h
+.cache/
+*.orig
+*.rej
