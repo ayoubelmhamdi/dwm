@@ -76,7 +76,7 @@ static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
-  { MODKEY|ControlMask,           XK_Return, spawn,          {.v = nvimst } },
+    { MODKEY|ControlMask,           XK_Return, spawn,          {.v = nvimst } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -100,11 +100,15 @@ static Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+    TAGKEYS(                        XK_ampersand,              0)
+    TAGKEYS(                        XK_eacute,                 1)
+	TAGKEYS(                        XK_quotedbl,               2)
+	TAGKEYS(                        XK_apostrophe,             3)
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
 	TAGKEYS(                        XK_4,                      3)
-	{ MODKEY|ControlMask,              XK_q,      quit,           {0} },
+	{ MODKEY|ControlMask,           XK_q,      quit,           {0} },
 };
 
 /* button definitions */
