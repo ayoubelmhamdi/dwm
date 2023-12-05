@@ -1,0 +1,6 @@
+new_patchs/
+p6.4/
+dwm
+*.orig
+*.rej
+*.o
