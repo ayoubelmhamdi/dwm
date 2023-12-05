@@ -8,6 +8,8 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int swallowfloating         = 1;   /* 1 means swallow floating windows by default */
 static const int splitstatus             = 1;        /* 1 for split status items */
 static const char *splitdelim            = ";";       /* Character used for separating status */
+static const unsigned int minwsz         = 20;       /* Minimal heigt of a client for smfact */
+static const float smfact                = 0.00; /* factor of tiled clients [0.00..0.95] */
 
 
 /* appearance */
@@ -83,6 +85,8 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
+	{ MODKEY|ShiftMask,             XK_h,      setsmfact,      {.f = +0.05} },
+	{ MODKEY|ShiftMask,             XK_l,      setsmfact,      {.f = -0.05} },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
