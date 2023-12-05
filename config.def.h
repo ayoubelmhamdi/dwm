@@ -6,6 +6,9 @@ static const unsigned int systrayonleft  = 0;   /* 0: systray in the right corne
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
 static const int swallowfloating         = 1;   /* 1 means swallow floating windows by default */
+static const int splitstatus             = 1;        /* 1 for split status items */
+static const char *splitdelim            = ";";       /* Character used for separating status */
+
 
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
