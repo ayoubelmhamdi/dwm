@@ -302,6 +302,9 @@ static int isdescprocess(pid_t p, pid_t c);
 static Client *swallowingclient(Window w);
 static Client *termforwin(const Client *c);
 static pid_t winpid(Window w);
+static int child_pid(pid_t pid);
+static char *getcwd_by_pid(pid_t pid);
+static void newterm(const Arg *);
 
 /* variables */
 static Client *prevzoom = NULL;
@@ -3133,6 +3136,46 @@ zoom(const Arg *arg)
 	}
 	focus(c);
 	arrange(c->mon);
+}
+
+int
+child_pid(pid_t pid)
+{
+	char buf[32];
+	FILE *fp;
+	int child;
+	snprintf(buf, sizeof buf, "/proc/%d/task/%d/children", pid, pid);
+	fp = fopen(buf, "r");
+	if (fp == NULL) {
+		perror("fopen");
+		return -1;
+	}
+	if (fgets(buf, sizeof buf, fp) == NULL) {
+		child = 0;
+	} else {
+		child = atoi(buf);
+	}
+	fclose(fp);
+	return child;
+}
+
+char *
+getcwd_by_pid(pid_t pid)
+{
+	char buf[32];
+	snprintf(buf, sizeof buf, "/proc/%d/cwd",  (int)child_pid(pid));
+	return realpath(buf, NULL);
+}
+
+void
+newterm(const Arg* v)
+{
+	Client *c;
+
+	if ((c = selmon->sel)) {
+		chdir(getcwd_by_pid(c->pid));
+	}
+	spawn(v);
 }
 
 int
