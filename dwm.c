@@ -165,11 +165,11 @@ typedef struct {
 	const char *instance;
 	const char *title;
 	unsigned int tags;
-	unsigned int switchtotag;
 	int isfloating;
 	int isterminal;
 	int noswallow;
-  int isfakefullscreen;
+	int isfakefullscreen;
+	unsigned int switchtotag;
 	int monitor;
 } Rule;
 
@@ -2404,18 +2404,18 @@ unmanage(Client *c, int destroyed)
 		XSetErrorHandler(xerror);
 		XUngrabServer(dpy);
 	}
-	free(c);
 
 	if (!s) {
 		arrange(m);
 		focus(NULL);
 		updateclientlist();
-	if (c->switchtotag) {
-		Arg a = { .ui = c->switchtotag };
-		view(&a);
-	}
+		if (c->switchtotag) {
+			Arg a = { .ui = c->switchtotag };
+			view(&a);
+		}
 
 	}
+	free(c);
 }
 
 void
