@@ -142,6 +142,7 @@ struct Monitor {
 	char ltsymbol[16];
 	float mfact;
 	float smfact;
+    float mvfact;
 	int nmaster;
 	int num;
 	int by;               /* bar geometry */
@@ -256,6 +257,7 @@ static void setsticky(Client *c, int sticky);
 static void setlayout(const Arg *arg);
 static void setmfact(const Arg *arg);
 static void setsmfact(const Arg *arg);
+static void setmvfact(const Arg *arg);
 static void setup(void);
 static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
@@ -910,6 +912,7 @@ createmon(void)
 	m->tagset[0] = m->tagset[1] = (1<<i) & TAGMASK;
 	m->mfact = mfact;
 	m->smfact = smfact;
+	m->mvfact = 0.0;
 	m->nmaster = nmaster;
 	m->showbar = showbar;
 	m->topbar = topbar;
@@ -2017,6 +2020,22 @@ setsmfact(const Arg *arg) {
 
 
 void
+setmvfact(const Arg *arg)
+{
+	float vf;
+
+	if(!arg || !selmon->lt[selmon->sellt]->arrange)
+		return;
+	if(selmon->nmaster < 2)
+		return;
+	vf = arg->sf + selmon->mvfact;
+	if(vf < -0.9 || vf > 0.9)
+		return;
+	selmon->mvfact = vf;
+	arrange(selmon);
+}
+
+void
 setup(void)
 {
 	int i;
@@ -2198,7 +2217,7 @@ tagmon(const Arg *arg)
 void
 tile(Monitor *m)
 {
-	unsigned int i, n, h, smh, mw, my, ty, bw;
+	unsigned int i, n, h, smh, mvh, mw, my, ty, bw;
 	Client *c;
 
 	for (n = 0, c = nexttiled(m->cl->clients, m); c; c = nexttiled(c->next, m), n++);
@@ -2215,7 +2234,13 @@ tile(Monitor *m)
 		mw = m->ww;
 	for (i = my = ty = 0, c = nexttiled(m->cl->clients, m); c; c = nexttiled(c->next, m), i++)
 		if (i < m->nmaster) {
-			h = (m->wh - my) / (MIN(n, m->nmaster) - i);
+			mvh = m->wh * m->mvfact;
+			if(i == 0 && m->nmaster > 1)
+				h = (m->wh - mvh) / MIN(n, m->nmaster);
+			else if(i == m->nmaster - 1)
+				h = (m->wh - my) / (MIN(n, m->nmaster) - i);
+			else
+				h = (m->wh - mvh - my) / (MIN(n, m->nmaster) - i);
 			resize(c, m->wx, m->wy + my, mw - 2*bw, h - 2*bw, bw, 0);
 			if (my + HEIGHT(c) < m->wh)
 				my += HEIGHT(c);
